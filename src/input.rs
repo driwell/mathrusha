@@ -12,9 +12,10 @@ pub struct Input;
 
 impl Plugin for Input {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, listen_keyboard_input_events);
-        app.add_systems(Update, update_prompt);
-        app.add_systems(Update, compare_values);
+        app.add_systems(
+            Update,
+            (compare_values, update_prompt, listen_keyboard_input_events).chain(),
+        );
     }
 }
 
