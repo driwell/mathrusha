@@ -95,14 +95,22 @@ fn compare_values(
                 // TODO: handle possible errors
                 let num1 = numbers.next().unwrap().parse::<i32>().unwrap();
                 let num2 = numbers.next().unwrap().parse::<i32>().unwrap();
-                println!("c=correct: {}", num1 * num2);
+                let correct = num1 * num2;
+                println!("c=>correct: {}", correct);
 
                 let mut reply_text = reply.single_mut();
                 if reply_text.sections[0].value.is_empty() {
                     continue;
                 }
                 let value = mem::take(&mut reply_text.sections[0].value);
-                println!("c=>reply: {value}");
+                let attempt = value.parse::<i32>().unwrap();
+                println!("c=>attempt: {attempt}");
+
+                if attempt == correct {
+                    println!("won");
+                } else {
+                    println!("lost");
+                }
             }
             _ => continue,
         }
