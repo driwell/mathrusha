@@ -14,6 +14,7 @@ impl Plugin for Input {
     fn build(&self, app: &mut App) {
         app.add_systems(Update, listen_keyboard_input_events);
         app.add_systems(Update, update_prompt);
+        app.add_systems(Update, compare_values);
     }
 }
 
@@ -65,6 +66,37 @@ fn update_prompt(
                 let num2 = rand::thread_rng().gen_range(1..=10);
                 let operator = "x";
                 edit_text.single_mut().sections[0].value = format!("{num1} {operator} {num2}");
+            }
+            _ => continue,
+        }
+    }
+}
+
+fn compare_values(
+    mut events: EventReader<KeyboardInput>,
+    mut prompt: Query<&mut Text, (With<crate::ui::Prompt>, Without<crate::ui::Reply>)>,
+    mut reply: Query<&mut Text, With<crate::ui::Reply>>,
+) {
+    for event in events.read() {
+        if event.state == ButtonState::Released {
+            continue;
+        }
+
+        match &event.logical_key {
+            Key::Enter => {
+                let mut prompt_text = prompt.single_mut();
+                if prompt_text.sections[0].value.is_empty() {
+                    continue;
+                }
+                let value = mem::take(&mut prompt_text.sections[0].value);
+                println!("c=>prompt: {value}");
+
+                let mut reply_text = reply.single_mut();
+                if reply_text.sections[0].value.is_empty() {
+                    continue;
+                }
+                let value = mem::take(&mut reply_text.sections[0].value);
+                println!("c=>reply: {value}");
             }
             _ => continue,
         }
