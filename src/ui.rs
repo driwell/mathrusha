@@ -1,15 +1,15 @@
 use bevy::prelude::*;
 
-pub struct Prompt;
+pub struct Layout;
 
-#[derive(Component)]
-pub struct Reply;
-
-impl Plugin for Prompt {
+impl Plugin for Layout {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, spawn_layout);
     }
 }
+
+#[derive(Component)]
+pub struct Reply;
 
 fn spawn_layout(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/FiraSans-Bold.ttf");
