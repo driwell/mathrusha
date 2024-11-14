@@ -11,6 +11,9 @@ impl Plugin for Layout {
 #[derive(Component)]
 pub struct Reply;
 
+#[derive(Component)]
+pub struct Prompt;
+
 fn spawn_layout(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/FiraSans-Bold.ttf");
 
@@ -31,18 +34,21 @@ fn spawn_layout(mut commands: Commands, asset_server: Res<AssetServer>) {
             ..default()
         })
         .with_children(|builder| {
-            builder.spawn(TextBundle {
-                text: Text::from_section(
-                    "prompt".to_string(),
-                    TextStyle {
-                        font: font.clone(),
-                        font_size: 100.0,
-                        ..default()
-                    },
-                )
-                .with_justify(JustifyText::Center),
-                ..default()
-            });
+            builder.spawn((
+                TextBundle {
+                    text: Text::from_section(
+                        "prompt".to_string(),
+                        TextStyle {
+                            font: font.clone(),
+                            font_size: 100.0,
+                            ..default()
+                        },
+                    )
+                    .with_justify(JustifyText::Center),
+                    ..default()
+                },
+                Prompt,
+            ));
 
             builder.spawn((
                 TextBundle {
