@@ -104,6 +104,8 @@ fn compare_values(
                     continue;
                 }
                 let value = mem::take(&mut reply_text.sections[0].value);
+
+                // TODO: handle possible errors
                 let attempt = value.parse::<i32>().unwrap();
                 println!("c=>attempt: {attempt}");
 
