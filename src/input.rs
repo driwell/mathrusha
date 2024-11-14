@@ -90,6 +90,9 @@ fn compare_values(
                 }
                 let value = mem::take(&mut prompt_text.sections[0].value);
                 println!("c=>prompt: {value}");
+                let mut numbers = value.split(" x ");
+                println!("c=>1st: {:?}", numbers.next());
+                println!("c=>2nd: {:?}", numbers.next());
 
                 let mut reply_text = reply.single_mut();
                 if reply_text.sections[0].value.is_empty() {

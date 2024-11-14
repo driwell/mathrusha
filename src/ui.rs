@@ -37,7 +37,7 @@ fn spawn_layout(mut commands: Commands, asset_server: Res<AssetServer>) {
             builder.spawn((
                 TextBundle {
                     text: Text::from_section(
-                        "START".to_string(),
+                        "".to_string(),
                         TextStyle {
                             font: font.clone(),
                             font_size: 100.0,
