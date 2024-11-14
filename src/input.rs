@@ -61,8 +61,10 @@ fn update_prompt(
 
         match &event.logical_key {
             Key::Enter => {
-                let number = rand::thread_rng().gen_range(1..=99);
-                edit_text.single_mut().sections[0].value = number.to_string();
+                let num1 = rand::thread_rng().gen_range(1..=10);
+                let num2 = rand::thread_rng().gen_range(1..=10);
+                let operator = "x";
+                edit_text.single_mut().sections[0].value = format!("{num1} {operator} {num2}");
             }
             _ => continue,
         }
