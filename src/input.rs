@@ -75,8 +75,8 @@ fn update_prompt(
 
 fn compare_values(
     mut events: EventReader<KeyboardInput>,
-    mut prompt: Query<&mut Text, (With<crate::ui::Prompt>, Without<crate::ui::Reply>)>,
-    mut reply: Query<&mut Text, (With<crate::ui::Reply>, Without<crate::ui::Score>)>,
+    prompt: Query<&mut Text, (With<crate::ui::Prompt>, Without<crate::ui::Reply>)>,
+    reply: Query<&mut Text, (With<crate::ui::Reply>, Without<crate::ui::Score>)>,
     mut score: Query<&mut Text, (With<crate::ui::Score>, Without<crate::ui::Prompt>)>,
 ) {
     for event in events.read() {
@@ -92,11 +92,11 @@ fn compare_values(
                     continue;
                 }
 
-                let mut prompt_text = prompt.single_mut();
+                let prompt_text = prompt.single();
                 if prompt_text.sections[0].value.is_empty() {
                     continue;
                 }
-                let value = mem::take(&mut prompt_text.sections[0].value);
+                let value = &prompt_text.sections[0].value;
                 println!("c=>prompt: {value}");
                 let mut numbers = value.split(" x ");
 
@@ -106,11 +106,11 @@ fn compare_values(
                 let correct = num1 * num2;
                 println!("c=>correct: {}", correct);
 
-                let mut reply_text = reply.single_mut();
+                let reply_text = reply.single();
                 if reply_text.sections[0].value.is_empty() {
                     continue;
                 }
-                let value = mem::take(&mut reply_text.sections[0].value);
+                let value = &reply_text.sections[0].value;
 
                 // TODO: handle possible errors
                 let attempt = value.parse::<i32>().unwrap();
