@@ -76,7 +76,8 @@ fn update_prompt(
 fn compare_values(
     mut events: EventReader<KeyboardInput>,
     mut prompt: Query<&mut Text, (With<crate::ui::Prompt>, Without<crate::ui::Reply>)>,
-    mut reply: Query<&mut Text, With<crate::ui::Reply>>,
+    mut reply: Query<&mut Text, (With<crate::ui::Reply>, Without<crate::ui::Score>)>,
+    mut score: Query<&mut Text, (With<crate::ui::Score>, Without<crate::ui::Prompt>)>,
 ) {
     for event in events.read() {
         if event.state == ButtonState::Released {
@@ -109,8 +110,16 @@ fn compare_values(
                 let attempt = value.parse::<i32>().unwrap();
                 println!("c=>attempt: {attempt}");
 
+                let mut current_score = score.single_mut();
+                if current_score.sections[0].value.is_empty() {
+                    current_score.sections[0].value = "0".to_string();
+                    continue;
+                }
+
                 if attempt == correct {
-                    println!("won");
+                    // TODO: handle possible errors
+                    let new_score = current_score.sections[0].value.parse::<u32>().unwrap() + 1;
+                    current_score.sections[0].value = new_score.to_string();
                 } else {
                     println!("lost");
                 }

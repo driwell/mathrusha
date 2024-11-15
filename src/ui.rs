@@ -14,6 +14,9 @@ pub struct Reply;
 #[derive(Component)]
 pub struct Prompt;
 
+#[derive(Component)]
+pub struct Score;
+
 fn spawn_layout(mut commands: Commands, asset_server: Res<AssetServer>) {
     let font = asset_server.load("fonts/FiraSans-Bold.ttf");
 
@@ -26,7 +29,11 @@ fn spawn_layout(mut commands: Commands, asset_server: Res<AssetServer>) {
                 width: Val::Percent(100.0),
                 height: Val::Percent(100.0),
                 grid_template_columns: vec![GridTrack::flex(1.0)],
-                grid_template_rows: vec![GridTrack::flex(1.0), GridTrack::flex(1.0)],
+                grid_template_rows: vec![
+                    GridTrack::px(30.),
+                    GridTrack::flex(1.0),
+                    GridTrack::flex(1.0),
+                ],
                 align_items: AlignItems::Center,
                 ..default()
             },
@@ -34,6 +41,22 @@ fn spawn_layout(mut commands: Commands, asset_server: Res<AssetServer>) {
             ..default()
         })
         .with_children(|builder| {
+            builder.spawn((
+                TextBundle {
+                    text: Text::from_section(
+                        "0".to_string(),
+                        TextStyle {
+                            font: font.clone(),
+                            font_size: 24.0,
+                            ..default()
+                        },
+                    )
+                    .with_justify(JustifyText::Center),
+                    ..default()
+                },
+                Score,
+            ));
+
             builder.spawn((
                 TextBundle {
                     text: Text::from_section(
