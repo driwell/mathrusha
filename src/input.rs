@@ -86,6 +86,12 @@ fn compare_values(
 
         match &event.logical_key {
             Key::Enter => {
+                let mut current_score = score.single_mut();
+                if current_score.sections[0].value.is_empty() {
+                    current_score.sections[0].value = "0".to_string();
+                    continue;
+                }
+
                 let mut prompt_text = prompt.single_mut();
                 if prompt_text.sections[0].value.is_empty() {
                     continue;
@@ -109,12 +115,6 @@ fn compare_values(
                 // TODO: handle possible errors
                 let attempt = value.parse::<i32>().unwrap();
                 println!("c=>attempt: {attempt}");
-
-                let mut current_score = score.single_mut();
-                if current_score.sections[0].value.is_empty() {
-                    current_score.sections[0].value = "0".to_string();
-                    continue;
-                }
 
                 if attempt == correct {
                     // TODO: handle possible errors
